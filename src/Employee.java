@@ -14,7 +14,7 @@ public class Employee extends Person {
     }
 
     // Parameterized constructor
-    public Employee(String name, int age, String gender, String id, String contactInfom, String role, String department, String workStatus, Int workHours) {
+    public Employee(String name, int age, String gender, String id, String contactInfom, String role, String department, String workStatus, int workHours) {
         super(name, age, gender, id, contactInfom); // Calling the Person class constructor
         this.role = role;
         this.department = department;

@@ -1,9 +1,9 @@
 public class Visitor extends Person {
-    private String ticketNumber;  //票的序号
-    private String visitDate;  //游玩时间
-    private String ticketStatus;  //票务状态，如“有效”、“已过期”、“已退款”等。
-    private String healthStatus;  //健康状况
-    private String emergencyContact;  //紧急联系电话
+    public String ticketNumber;  //票的序号
+    public String visitDate;  //游玩时间
+    public String ticketStatus;  //票务状态，如“有效”、“已过期”、“已退款”等。
+    public String healthStatus;  //健康状况
+    public String emergencyContact;  //紧急联系电话
 
 
     // Default constructor
@@ -66,4 +66,5 @@ public class Visitor extends Person {
     public String getEmergencyContact(){
         return emergencyContact;
     }
+
 }

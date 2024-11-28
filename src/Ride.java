@@ -1,12 +1,13 @@
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
-public abstract class Ride implements RideInterface {
+public class Ride implements RideInterface {
     private String rideName;
     private String rideType;
     private String rideStatus;  // The status of the ride
     private Employee rideOperator;  // Ride operator
-    private final LinkedList<Visitor> queue;
+    private final Queue<Visitor> queue;
     private final List<Visitor> rideHistory;
 
     // Default constructor
@@ -20,7 +21,7 @@ public abstract class Ride implements RideInterface {
     }
 
     // Parameterized constructor
-    public Ride(String rideName, String rideType, String rideStatus, Employee rideOperator, List<Visitor> queue, List<Visitor> rideHistory) {
+    public Ride(String rideName, String rideType, String rideStatus, Employee rideOperator, LinkedList<Visitor> queue, LinkedList<Visitor> rideHistory) {
         this.rideName = rideName;
         this.rideType = rideType;
         this.rideStatus = rideStatus;
@@ -28,6 +29,7 @@ public abstract class Ride implements RideInterface {
         this.queue = new LinkedList<>();
         this.rideHistory = new LinkedList<>();
     }
+
 
     // Getters and setters
     public void setRideName(String rideName) {
@@ -64,33 +66,52 @@ public abstract class Ride implements RideInterface {
 
     @Override
     public void addVisitorToQueue(Visitor visitor) {
-        queue.offer(visitor);  // 添加访客到队列
+        queue.add(visitor);  // 添加访客到队列
         System.out.println(visitor.getName() + " added to the queue.");
     }
 
     @Override
-    public void removeVisitorFromQueue(Visitor visitor) {
-        if (queue.remove(visitor)) {
-            System.out.println(visitor.getName() + " removed from the queue.");
+    public void removeVisitorFromQueue() {
+        if (!queue.isEmpty()) {
+            Visitor removedVisitor = queue.poll();
+            System.out.println("Visitor " + removedVisitor.getName() + " has been removed from the queue.");
         } else {
-            System.out.println(visitor.getName() + " not found in the queue.");
+            System.out.println("No visitors in the queue to remove.");
         }
     }
 
     @Override
     public void printQueue() {
-        System.out.println("Current Queue: ");
-        for (Visitor v : queue) {
-            System.out.println(v.getName());
+        if (queue.isEmpty()) {
+            System.out.println("The queue is empty.");
+        } else {
+            System.out.println("Visitors in the queue for :");
+            for (Visitor visitor : queue) {
+                //System.out.println("Name="+ visitor.getName() + " " + "Age="+ visitor.getAge() + " " + "Gender="+ visitor.getGender() + " " + "Id="+ visitor.getId() + " " + "ContactInfo="+ visitor.getContactInfo() + " " + "TicketNumber="+ visitor.getTicketNumber() + " " + "VisitDate="+ visitor.getVisitDate() + " " + "TicketStatus="+ visitor.getTicketStatus() + " " + "HealthStatus="+ visitor.getHealthStatus() + " " + "EmergencyContact="+ visitor.getEmergencyContact());
+                System.out.println(String.format("Name=%s Age=%d Gender=%s Id=%s ContactInfo=%s TicketNumber=%s VisitDate=%s TicketStatus=%s HealthStatus=%s EmergencyContact=%s", 
+                visitor.getName(), 
+                visitor.getAge(), 
+                visitor.getGender(), 
+                visitor.getId(), 
+                visitor.getContactInfo(), 
+                visitor.getTicketNumber(), 
+                visitor.getVisitDate(), 
+                visitor.getTicketStatus(), 
+                visitor.getHealthStatus(), 
+                visitor.getEmergencyContact()));
+            }
         }
     }
+
 
     @Override
     public void runOneCycle() {
         if (!queue.isEmpty()) {
-            Visitor visitor = queue.poll();
-            addVisitorToHistory(visitor); // 让访客进行游乐，并加入历史
-            System.out.println(visitor.getName() + " is riding the rollercoaster!");
+            // 让访客进行游乐，并加入历史
+            for (Visitor v : queue) {
+                addVisitorToHistory(v);
+                System.out.println(v.getName() + " is riding the rollercoaster!");
+            }    
         } else {
             System.out.println("No visitors in the queue.");
         }
@@ -114,9 +135,23 @@ public abstract class Ride implements RideInterface {
 
     @Override
     public void printRideHistory() {
-        System.out.println("Ride History: ");
-        for (Visitor v : rideHistory) {
-            System.out.println(v.getName());
+        if (rideHistory.isEmpty()) {
+            System.out.println("No visitors in the ride history.");
+        } else {
+            System.out.println("Ride History:");
+            for (Visitor v : rideHistory) {
+                System.out.println(String.format("Name=%s Age=%d Gender=%s Id=%s ContactInfo=%s TicketNumber=%s VisitDate=%s TicketStatus=%s HealthStatus=%s EmergencyContact=%s", 
+                v.getName(), 
+                v.getAge(), 
+                v.getGender(), 
+                v.getId(), 
+                v.getContactInfo(), 
+                v.getTicketNumber(), 
+                v.getVisitDate(), 
+                v.getTicketStatus(), 
+                v.getHealthStatus(), 
+                v.getEmergencyContact()));
+            }
         }
     }
 }

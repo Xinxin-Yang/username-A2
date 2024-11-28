@@ -1,9 +1,9 @@
 public abstract class Person {
-    private String name;
-    private int age;
-    private String gender;
-    private String id;
-    private String contactInfo;
+    public String name;
+    public int age;
+    public String gender;
+    public String id;
+    public String contactInfo;
 
     // Default constructor
     public Person() {
