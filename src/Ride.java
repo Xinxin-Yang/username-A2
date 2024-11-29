@@ -1,5 +1,6 @@
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 public class Ride implements RideInterface {
@@ -8,7 +9,7 @@ public class Ride implements RideInterface {
     private String rideStatus;  // The status of the ride
     private Employee rideOperator;  // Ride operator
     private final Queue<Visitor> queue;
-    private final List<Visitor> rideHistory;
+    private final LinkedList<Visitor> rideHistory;
 
     // Default constructor
     public Ride() {
@@ -87,18 +88,7 @@ public class Ride implements RideInterface {
         } else {
             System.out.println("Visitors in the queue for :");
             for (Visitor visitor : queue) {
-                //System.out.println("Name="+ visitor.getName() + " " + "Age="+ visitor.getAge() + " " + "Gender="+ visitor.getGender() + " " + "Id="+ visitor.getId() + " " + "ContactInfo="+ visitor.getContactInfo() + " " + "TicketNumber="+ visitor.getTicketNumber() + " " + "VisitDate="+ visitor.getVisitDate() + " " + "TicketStatus="+ visitor.getTicketStatus() + " " + "HealthStatus="+ visitor.getHealthStatus() + " " + "EmergencyContact="+ visitor.getEmergencyContact());
-                System.out.println(String.format("Name=%s Age=%d Gender=%s Id=%s ContactInfo=%s TicketNumber=%s VisitDate=%s TicketStatus=%s HealthStatus=%s EmergencyContact=%s", 
-                visitor.getName(), 
-                visitor.getAge(), 
-                visitor.getGender(), 
-                visitor.getId(), 
-                visitor.getContactInfo(), 
-                visitor.getTicketNumber(), 
-                visitor.getVisitDate(), 
-                visitor.getTicketStatus(), 
-                visitor.getHealthStatus(), 
-                visitor.getEmergencyContact()));
+                System.out.println(visitor);
             }
         }
     }
@@ -108,12 +98,11 @@ public class Ride implements RideInterface {
     public void runOneCycle() {
         if (!queue.isEmpty()) {
             // 让访客进行游乐，并加入历史
-            for (Visitor v : queue) {
-                addVisitorToHistory(v);
-                System.out.println(v.getName() + " is riding the rollercoaster!");
-            }    
+            Visitor visitor = queue.poll();
+            addVisitorToHistory(visitor);
+            System.out.println(visitor.getName() + " is riding the rollercoaster!");    
         } else {
-            System.out.println("No visitors in the queue.");
+            System.out.println("No visitor in the queue.");
         }
     }
 
@@ -125,7 +114,9 @@ public class Ride implements RideInterface {
 
     @Override
     public boolean checkVisitorFromHistory(Visitor visitor) {
-        return rideHistory.contains(visitor);
+        boolean found = rideHistory.contains(visitor);
+        System.out.println(visitor.getName() + (found ? " is" : " is not") + " in the ride history.");
+        return found;
     }
 
     @Override
@@ -139,19 +130,19 @@ public class Ride implements RideInterface {
             System.out.println("No visitors in the ride history.");
         } else {
             System.out.println("Ride History:");
-            for (Visitor v : rideHistory) {
-                System.out.println(String.format("Name=%s Age=%d Gender=%s Id=%s ContactInfo=%s TicketNumber=%s VisitDate=%s TicketStatus=%s HealthStatus=%s EmergencyContact=%s", 
-                v.getName(), 
-                v.getAge(), 
-                v.getGender(), 
-                v.getId(), 
-                v.getContactInfo(), 
-                v.getTicketNumber(), 
-                v.getVisitDate(), 
-                v.getTicketStatus(), 
-                v.getHealthStatus(), 
-                v.getEmergencyContact()));
+            Iterator<Visitor> it = rideHistory.iterator();
+            while (it.hasNext()) {
+                System.out.println(it.next());
             }
         }
     }
+
+    public void rideHistorySort() {
+    if (rideHistory.isEmpty()) {
+        System.out.println("Ride history is empty. Nothing to sort.");
+    } else {
+        Collections.sort(rideHistory, new ComparatorVisitor());
+        System.out.println("Ride history sorted.");
+    }
+}
 }

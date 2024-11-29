@@ -66,5 +66,9 @@ public class Visitor extends Person {
     public String getEmergencyContact(){
         return emergencyContact;
     }
-
+    
+    @Override
+    public String toString() {
+        return "Visitor[name=" + name + ", age=" + age + ",Gender=" + gender + ",Id=" + id+ ",ContactInfo=" + contactInfo + ",TicketNumber=" + ticketNumber + ",VisitDate=" + visitDate + ",TicketStatus=" + ticketStatus + ",HealthStatus=" + healthStatus + ",EmergencyContact=" + emergencyContact +"]";
+    }
 }
