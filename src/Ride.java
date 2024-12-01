@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,7 +17,7 @@ public class Ride implements RideInterface {
     private int numOfCycles; // 已运行的周期数
         
     
-        // Default constructor
+    // Default constructor
         public Ride() {
             this.rideName = "Unknown";
             this.rideType = "Unknown";
@@ -165,6 +168,28 @@ public class Ride implements RideInterface {
             System.out.println("Ride history sorted.");
         }
         }
+
+        public void exportRideHistory(String fileName) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+        for (Visitor visitor : rideHistory) {
+            writer.write(String.format("%s,%d,%s,%s,%s,%s,%s,%s,%s,%s",
+                    visitor.getName(),
+                    visitor.getAge(),
+                    visitor.getGender(),
+                    visitor.getId(),
+                    visitor.getContactInfo(),
+                    visitor.getTicketNumber(),
+                    visitor.getVisitDate(),
+                    visitor.getTicketStatus(),
+                    visitor.getHealthStatus(),
+                    visitor.getEmergencyContact()));
+            writer.newLine(); // 每位访客信息写入一行
+        }
+        System.out.println("Ride history successfully exported to file: " + fileName);
+    } catch (IOException e) {
+        System.err.println("Error exporting ride history: " + e.getMessage());
+    }
+}
     
 
 }

@@ -1,10 +1,11 @@
 public class AssignmentTwo {
     public static void main(String[] args) {
         AssignmentTwo part = new AssignmentTwo();
-        part.partThree();
-        part.partFourA();
-        part.partFourB();
-        part.partFive();
+        //part.partThree();
+        //part.partFourA();
+        //part.partFourB();
+        //part.partFive();
+        part.partSix();
 
     }
     public void partThree(){
@@ -118,7 +119,25 @@ public class AssignmentTwo {
         ride4.printRideHistory();
     }
     public void partSix(){
+        Ride ride5 = new Ride();
+        
+        Visitor visitor1 = new Visitor("Lee", 24, "female", "666666","192-2674-1286", "adu004", "9am", "valid", "healthy", "575-7742-3733");
+        Visitor visitor2 = new Visitor("Sharon", 24, "female", "777777","245-4852-5837", "adu005", "9am", "valid", "healthy", "553-9472-7930");
+        Visitor visitor3 = new Visitor("Benny", 30, "female", "888888","125-3823-2383", "adu006", "4pm", "valid", "healthy", "993-7363-7826");
+        Visitor visitor4 = new Visitor("David", 55, "male", "999999","689-2661-6113", "old002", "2pm", "valid", "healthy", "339-6357-7727");
+        Visitor visitor5 = new Visitor("Jason", 17, "male", "000000","242-5756-8443", "teen002", "8am", "valid", "healthy", "777-8116-3647");
+
+        // 添加访客到历史记录
+        ride5.addVisitorToHistory(visitor1);
+        ride5.addVisitorToHistory(visitor2);
+        ride5.addVisitorToHistory(visitor3);
+        ride5.addVisitorToHistory(visitor4);
+        ride5.addVisitorToHistory(visitor5);
+
+        // 导出历史记录到文件
+        ride5.exportRideHistory("visitor_history.csv");
     }
+    
     public void partSeven(){
     }
 }
