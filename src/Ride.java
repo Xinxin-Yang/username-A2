@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
@@ -186,10 +188,42 @@ public class Ride implements RideInterface {
             writer.newLine(); // 每位访客信息写入一行
         }
         System.out.println("Ride history successfully exported to file: " + fileName);
-    } catch (IOException e) {
-        System.err.println("Error exporting ride history: " + e.getMessage());
+    } catch (IOException er) {
+        System.err.println("Error exporting ride history: " + er.getMessage());
     }
-}
+        }
+
+        public int numberOfVisitorsInQueue(){  //打印队列中游客的数量
+            return queue.size();
+        }
     
 
+        public void importRideHistory(String fileName) {
+    try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] data = line.split(",");
+            if (data.length == 10) { // 确保数据的格式正确
+                Visitor visitor = new Visitor(
+                        data[0], // Name
+                        Integer.parseInt(data[1]), // Age
+                        data[2], // Gender
+                        data[3], // ID
+                        data[4], // ContactInfo
+                        data[5], // TicketNumber
+                        data[6], // VisitDate
+                        data[7], // TicketStatus
+                        data[8], // HealthStatus
+                        data[9]  // EmergencyContact
+                );
+                queue.add(visitor); // 将访客添加到等待队列中
+            } else {
+                System.err.println("Invalid data format: " + line);
+            }
+        }
+        System.out.println("Ride history successfully imported from file: " + fileName);
+    } catch (IOException er) {
+        System.err.println("Error importing ride history: " + er.getMessage());
+    }
+}
 }

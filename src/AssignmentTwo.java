@@ -5,7 +5,8 @@ public class AssignmentTwo {
         //part.partFourA();
         //part.partFourB();
         //part.partFive();
-        part.partSix();
+        //part.partSix();
+        part.partSeven();
 
     }
     public void partThree(){
@@ -139,5 +140,13 @@ public class AssignmentTwo {
     }
     
     public void partSeven(){
+        Ride ride6 = new Ride();
+
+        // 导入历史记录从文件
+        ride6.importRideHistory("visitor_history.csv");
+
+        // 打印访客总数和详情
+        System.out.println("Total visitors in Queue: " + ride6.numberOfVisitorsInQueue());
+        ride6.printQueue();
     }
 }
