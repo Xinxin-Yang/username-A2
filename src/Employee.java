@@ -1,6 +1,6 @@
 public class Employee extends Person {
-    private String role;  //职责
-    private String department; //部门
+    private String role;  //Duty
+    private String department; //section
     private String workStatus;
     private int workHours;
 

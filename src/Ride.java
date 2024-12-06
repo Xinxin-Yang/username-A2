@@ -8,15 +8,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Ride implements RideInterface {
+public class Ride implements RideInterface, FileManager<Visitor> {
     private String rideName;
     private String rideType;
     private String rideStatus;  // The status of the ride
     private Employee rideOperator;  // Ride operator
     private final Queue<Visitor> queue;
     private final LinkedList<Visitor> rideHistory;
-    public int maxRider; // 每个周期最多乘坐的游客数
-    private int numOfCycles; // 已运行的周期数
+    public int maxRider; // Maximum number of passengers per cycle
+    private int numOfCycles; // Number of cycles that have been run
         
     
     // Default constructor
@@ -69,7 +69,7 @@ public class Ride implements RideInterface {
             return rideStatus;
         }
         
-        // 设置游乐设施的操作员
+        // The operator who sets up the ride
         public void setRideOperator(Employee rideOperator) {
             this.rideOperator = rideOperator;
         }
@@ -81,7 +81,7 @@ public class Ride implements RideInterface {
     
         @Override
         public void addVisitorToQueue(Visitor visitor) {
-            queue.add(visitor);  // 添加访客到队列
+            queue.add(visitor);  // Add a visitor to the queue
             System.out.println(visitor.getName() + " added to the queue.");
         }
     
@@ -111,22 +111,22 @@ public class Ride implements RideInterface {
         @Override
         public void runOneCycle() {
             if (rideOperator == null) {
-                System.out.println("无法运行游乐设施：没有操作员！");
+                System.out.println("No operator assigned, cannot run this operation!");
                 return;
             }
             if (queue.isEmpty()) {
                 System.out.println("No visitor in the queue.");
             } 
             while(!queue.isEmpty()) {
-                int ridersCount = Math.min(queue.size(), maxRider); // 确定本次周期承载的游客数量
-                System.out.println("本次周期将接载 " + ridersCount + " 名游客。");
+                int ridersCount = Math.min(queue.size(), maxRider); // Determine the number of visitors carried in this cycle
+                System.out.println("This cycle will be loaded " + ridersCount + " tourists.");
                     for (int i = 0; i < ridersCount; i++) {
                         Visitor visitor = queue.poll(); 
                         rideHistory.add(visitor); 
                     }   
     
-            numOfCycles++; // 增加周期计数
-            System.out.println("游乐设施运行了 " + numOfCycles + " 个周期。");
+            numOfCycles++; // Increase cycle count
+            System.out.println("The ride is running " + numOfCycles + " cycles.");
             }
         }
         
@@ -158,9 +158,9 @@ public class Ride implements RideInterface {
                 Iterator<Visitor> it = rideHistory.iterator();
                 while (it.hasNext()) {
                     System.out.println(it.next());
-                }
+                }  //Iterator traversal is used
             }
-        }
+        }  //Iterator traversal is used
     
         public void rideHistorySort() {
         if (rideHistory.isEmpty()) {
@@ -171,59 +171,42 @@ public class Ride implements RideInterface {
         }
         }
 
-        public void exportRideHistory(String fileName) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-        for (Visitor visitor : rideHistory) {
-            writer.write(String.format("%s,%d,%s,%s,%s,%s,%s,%s,%s,%s",
-                    visitor.getName(),
-                    visitor.getAge(),
-                    visitor.getGender(),
-                    visitor.getId(),
-                    visitor.getContactInfo(),
-                    visitor.getTicketNumber(),
-                    visitor.getVisitDate(),
-                    visitor.getTicketStatus(),
-                    visitor.getHealthStatus(),
-                    visitor.getEmergencyContact()));
-            writer.newLine(); // 每位访客信息写入一行
-        }
-        System.out.println("Ride history successfully exported to file: " + fileName);
-    } catch (IOException er) {
-        System.err.println("Error exporting ride history: " + er.getMessage());
-    }
+        public static void logError(String message) {
+            System.err.println("ERROR: " + message);
         }
 
-        public int numberOfVisitorsInQueue(){  //打印队列中游客的数量
+         
+        @Override
+    public void exportRideHistory(String fileName) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (Visitor visitor : rideHistory) {
+                writer.write(visitor.toCSV());
+                writer.newLine();
+            }
+            System.out.println("Export successful: " + fileName);
+        } catch (IOException e) {
+            ErrorHandler.logError("Export failed: " + e.getMessage());
+        }
+    }
+
+        @Override
+    public Queue<Visitor> importRideHistory(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                queue.add(Visitor.fromCSV(line));
+            }
+            System.out.println("Import successful: " + fileName);
+        } catch (IOException e) {
+            ErrorHandler.logError("Import failed: " + e.getMessage());
+        } 
+        return queue;
+    }
+
+
+        public int numberOfVisitorsInQueue(){  //Print the number of visitors in the queue
             return queue.size();
         }
     
 
-        public void importRideHistory(String fileName) {
-    try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] data = line.split(",");
-            if (data.length == 10) { // 确保数据的格式正确
-                Visitor visitor = new Visitor(
-                        data[0], // Name
-                        Integer.parseInt(data[1]), // Age
-                        data[2], // Gender
-                        data[3], // ID
-                        data[4], // ContactInfo
-                        data[5], // TicketNumber
-                        data[6], // VisitDate
-                        data[7], // TicketStatus
-                        data[8], // HealthStatus
-                        data[9]  // EmergencyContact
-                );
-                queue.add(visitor); // 将访客添加到等待队列中
-            } else {
-                System.err.println("Invalid data format: " + line);
-            }
-        }
-        System.out.println("Ride history successfully imported from file: " + fileName);
-    } catch (IOException er) {
-        System.err.println("Error importing ride history: " + er.getMessage());
-    }
-}
 }

@@ -1,9 +1,9 @@
 public class Visitor extends Person {
-    public String ticketNumber;  //票的序号
-    public String visitDate;  //游玩时间
-    public String ticketStatus;  //票务状态，如“有效”、“已过期”、“已退款”等。
-    public String healthStatus;  //健康状况
-    public String emergencyContact;  //紧急联系电话
+    private final String ticketNumber;  //Ticket serial number
+    private final String visitDate;  //Play time
+    private final String ticketStatus;  //Ticket status, such as "valid", "expired", "refunded", etc.
+    private final String healthStatus;  //Health status
+    private final String emergencyContact;  //Emergency contact number
 
 
     // Default constructor
@@ -26,49 +26,17 @@ public class Visitor extends Person {
         this.emergencyContact = emergencyContact;
     }
 
-    // Getters and setters
-    public void setTicketNumber(String ticketNumber) {
-        this.ticketNumber = ticketNumber;
+    public String toCSV() {
+        return String.format("%s,%d,%s,%s,%s,%s,%s,%s,%s,%s", getName(), getAge(), getGender(), getId(), getContactInfo(), ticketNumber, visitDate, ticketStatus, healthStatus, emergencyContact);
     }
 
-    public String getTicketNumber() {
-        return ticketNumber;
-    }
-
-    public void setVisitDate(String visitDate) {
-        this.visitDate = visitDate;
-    }
-
-    public String getVisitDate() {
-        return visitDate;
-    }
-
-    public void setTicketStatus(String ticketStatus){
-        this.ticketStatus = ticketStatus;
-    }
-
-    public String getTicketStatus(){
-        return ticketStatus;
-    }
-
-    public void setHealthStatus(String healthStatus){
-        this.healthStatus = healthStatus;
-    }
-
-    public String getHealthStatus(){
-        return healthStatus;
-    }
-
-    public void setEmergencyContact(String emergencyContact){
-        this.emergencyContact = emergencyContact;
-    }
-
-    public String getEmergencyContact(){
-        return emergencyContact;
+    public static Visitor fromCSV(String csv) {
+        String[] data = csv.split(",");
+        return new Visitor(data[0], Integer.parseInt(data[1]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]);
     }
     
     @Override
     public String toString() {
-        return "Visitor[name=" + name + ", age=" + age + ",Gender=" + gender + ",Id=" + id+ ",ContactInfo=" + contactInfo + ",TicketNumber=" + ticketNumber + ",VisitDate=" + visitDate + ",TicketStatus=" + ticketStatus + ",HealthStatus=" + healthStatus + ",EmergencyContact=" + emergencyContact +"]";
+        return "Visitor[name=" + getName() + ", age=" + getAge() + ",Gender=" + getGender() + ",Id=" + getId()+ ",ContactInfo=" + getContactInfo() + ",TicketNumber=" + ticketNumber + ",VisitDate=" + visitDate + ",TicketStatus=" + ticketStatus + ",HealthStatus=" + healthStatus + ",EmergencyContact=" + emergencyContact +"]";
     }
 }
